@@ -1,55 +1,82 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Button, Linking} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  RefreshControl,
+  FlatList,
+  SectionList,
+} from 'react-native';
 
 const App = () => {
-  const [name, setName] = useState('Gary');
-  const [session, setSession] = useState({number: 71, title: 'ryze'});
-  const [current, setCurrent] = useState(true);
-  const [counter, setCounter] = useState(10);
+  // Declare state hooks
+  const [Refreshing, setRefreshing] = useState(false);
+  const [Sections, setSections] = useState([
+    {
+      title: 'Title 1',
+      data: ['Item 1-1', 'Item 1-2'],
+    },
+  ]);
 
-  const onClickHandler = () => {
-    setName('I am Gary');
-    setSession({
-      number: 711,
-      title: 'Vladimir',
-    });
-    setCurrent(false);
+  // Declare refresh function, declare new variable and use hooks.length , use setSections and give it new meaning
+  const onRefresh = () => {
+    setRefreshing(true);
+    const adding_index = Sections.length + 1;
+    setSections([
+      ...Sections,
+      {
+        title: 'Title' + adding_index,
+        data: ['Item' + adding_index + '-1', 'Item' + adding_index + '-2'],
+      },
+    ]);
+    setRefreshing(false);
   };
 
-  const onClickHandler1 = () => {
-    setCounter(counter + 1);
-  };
-
+  // Render the stuff here
   return (
-    <View style={styles.body}>
-      <Text style={styles.text}>{name}</Text>
-      <Text style={styles.text}>
-        {session.number} and {session.title}
-      </Text>
-      <Text style={styles.text}>
-        {current ? 'current session true' : 'next session false'}
-      </Text>
-      <Text style={styles.text}>
-        Number:{counter * 5} Click:{counter}
-      </Text>
-      <Button title="Update Number" onPress={onClickHandler1} />
-      <Button title="Update State" onPress={onClickHandler} />
-    </View>
+    <SectionList
+      keyExtractor={(item, index) => index.toString()}
+      sections={Sections}
+      renderItem={({item}) => (
+        <View style={styles.item}>
+          <Text style={styles.text_item}>{item}</Text>
+        </View>
+      )}
+      renderSectionHeader={({section}) => (
+        <View style={styles.header}>
+          <Text style={styles.text_header}>{section.title}</Text>
+        </View>
+      )}
+      refreshControl={
+        <RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+      }
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: '#adf',
-    alignItems: 'center',
+  header: {
+    backgroundColor: '#4ae1fa',
     justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
   },
-  text: {
-    color: '#fff',
-    fontSize: 20,
+  item: {
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text_header: {
+    color: '#000000',
+    fontSize: 45,
     fontStyle: 'italic',
     margin: 10,
+  },
+  text_item: {
+    color: '#000000',
+    fontSize: 35,
+    margin: 5,
   },
 });
 
