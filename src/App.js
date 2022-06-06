@@ -11,7 +11,8 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import MashButton from './CustomButton';
+import MashButton from '../src/CustomButton';
+import Header from '../src/Header';
 // import Header from './Header';
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
       source={{
         uri: 'https://cdn.pixabay.com/photo/2013/07/12/12/35/texture-145968_960_720.png',
       }}>
+      <Header />
       <Modal
         visible={showWarning}
         transparent
@@ -68,12 +70,6 @@ const App = () => {
         title={submitted ? 'Clear' : 'Submit'}
         color={'#00ff00'}
       />
-      <MashButton
-        onPressFunction={() => {}}
-        title={'Test'}
-        color={'#ff00ff'}
-        style={{margin: 10}}
-      />
       {/* <Pressable
         onPress={onPressHandler}
         hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
@@ -92,7 +88,7 @@ const App = () => {
           <Text style={styles.text}>You are registered as {name}</Text>
           <Image
             style={styles.image}
-            source={require('./assets/correct.png')}
+            source={require('../assets/correct.png')}
             resizeMode="stretch"
           />
         </View>
